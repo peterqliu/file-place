@@ -1,0 +1,161 @@
+<html>
+    <style>
+        body {
+            margin:0;
+            overflow: hidden;
+            font-family: sans-serif;
+            background: #333;
+            overscroll-behavior-x: none;
+        }
+
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
+        rect {
+            fill:white;
+            stroke: green;
+
+        }
+            
+        #container, svg {
+            width:100%;
+            top:0;
+            bottom: 0;
+            position:absolute;
+            outline: 1px solid green;
+            transform-origin: top left;
+            height:100%
+        }
+
+        #drawer {
+        }
+
+        .moving {
+            /* will-change: transform; */
+        };
+
+        .moving .item {
+            pointer-events:none;
+        }
+
+        .moving .title {
+            /* visibility:hidden; */
+        }
+        div {
+            transform-origin: top left;
+        }
+
+        .item {
+            margin: 0.25%;
+            border-radius:0.25%;
+            display:inline-block;
+            width:9vw;
+            height:9vw;
+            /* outline: 1px solid green; */
+            cursor: pointer;
+            overflow:hidden;
+            background-color: #ccc;
+            position:relative;
+        }
+
+        .item:hover {
+            /* outline: 3px solid red; */
+            background-color:#666
+        }
+        .img {
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .img:hover {
+            background-size: contain;
+            background-position: center;
+        }
+        .folder {
+            /* text-align: center; */
+            outline:1px solid blue;
+            background:white;
+        }
+
+        h3 {
+            position:absolute;
+            padding: 1vw;
+        }
+        
+        .title {
+            /* text-align:center;
+            margin-top:50%;
+            transform:translateY(-50%); */
+            z-index:99;
+            position:absolute;
+            pointer-events:none;
+        }
+        .folder-content {
+            /* transform:scale(0.1);
+            width:1000%;
+            height:1000%; */
+            transform-origin: center center;
+        }
+        .file {
+            border: 1px solid gray;
+        }
+
+        .file:hover {
+            border: 5px solid blue;
+        }
+    </style>
+    <style src="maplibre.css"></style>
+    <script src="js/l.js"></script>
+    <script src="js/maplibre.js"></script>
+    <body>
+        <div id="container">
+            <div id="drawer"></div>
+        </div>
+        <div id="map"></div>
+
+    </body>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+
+        var root = location.search.replace('?','');
+        var state = {
+            directory: new Directory(),
+            lastClick: 0,
+            lastMove: 0,
+            lastStyleUpdate: 0,
+            preview: false,
+            geojson: {
+                labels: {"type": "FeatureCollection","features": []},
+                fills: {"type": "FeatureCollection","features": []},
+                cornerFolderLabels:  {"type": "FeatureCollection", "features": []}
+            },
+            pending: {
+                mapDataUpdates: 0
+            },
+            hoverId: 0
+        };        
+        
+        // seed directory with root folder
+        state.directory.addFile({
+            n: root, 
+            ext: false, 
+            p: false, 
+            layout: 'bric',
+            w: 1,
+            pt: [0,0],
+            bb: [[-180,85], [180,-85]]
+        });
+
+        
+        function openFolder(path, cb) {
+            state.pending.mapDataUpdates++
+            fetch(`readDirectory?p=${path}`)
+                .then((response) => response.json())
+                .then(r => cb(r))
+        }
+
+    </script>
+    <script src="js/map.js"></script>
+
+</html>

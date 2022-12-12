@@ -1,0 +1,21 @@
+{
+  "name": "file-place",
+  "version": "0.0.1",
+  "description": "a map-like file browser",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "file"
+  ],
+  "author": "peterqliu",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "image-size": "^1.0.2",
+    "mime-types": "^2.1.35",
+    "pdf-thumbnail": "^1.0.6"
+  }
+}
